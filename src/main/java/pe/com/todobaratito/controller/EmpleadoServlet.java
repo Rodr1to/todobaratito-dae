@@ -6,14 +6,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import pe.com.todobaratito.dao.*;
 import pe.com.todobaratito.dao.impl.*;
 import pe.com.todobaratito.model.*;
 import pe.com.todobaratito.util.StringManager;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 @WebServlet(name = "EmpleadoServlet", urlPatterns = {"/EmpleadoServlet"})
 public class EmpleadoServlet extends HttpServlet {
@@ -50,9 +49,7 @@ public class EmpleadoServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String accion = request.getParameter("accion");
-            if (accion == null) {
-                accion = "listar";
-            }
+            if (accion == null) accion = "listar";
             switch (accion) {
                 case "registro":
                     cargarCombos(request);
@@ -84,7 +81,7 @@ public class EmpleadoServlet extends HttpServlet {
                     break;
             }
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.println("Error doGet: " + ex.toString());
         }
     }
 
@@ -93,9 +90,7 @@ public class EmpleadoServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String accion = request.getParameter("accion");
-            if (accion == null) {
-                accion = "listar";
-            }
+            if (accion == null) accion = "listar";
             switch (accion) {
                 case "registrar":
                     request.setCharacterEncoding("UTF-8");
@@ -110,67 +105,48 @@ public class EmpleadoServlet extends HttpServlet {
                 case "validar":
                     login(request, response);
                     break;
-                case "regresar":
-                    findAllCustom(request, response);
-                    break;
                 default:
                     findAllCustom(request, response);
                     break;
             }
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.println("Error doPost: " + ex.toString());
         }
     }
 
 
     private void findAllCustom(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<Empleado> empleados = daoemp.findAllCustom();
-            request.setAttribute("empleados", empleados);
+            request.setAttribute("empleados", daoemp.findAllCustom());
             request.getRequestDispatcher("/empleado/listarempleado.jsp").forward(request, response);
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+        } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void findAll(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<Empleado> empleados = daoemp.findAll();
-            request.setAttribute("empleados", empleados);
+            request.setAttribute("empleados", daoemp.findAll());
             request.getRequestDispatcher("/empleado/habilitarempleado.jsp").forward(request, response);
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+        } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void add(HttpServletRequest request, HttpServletResponse response) {
         try {
             Empleado obj = capturarDatos(request);
-            if (obj != null) {
-                boolean res = daoemp.add(obj);
-                if (res) {
-                    response.sendRedirect("EmpleadoServlet");
-                } else {
-                    response.sendRedirect("EmpleadoServlet?accion=registro");
-                }
+            if (obj != null && daoemp.add(obj)) {
+                response.sendRedirect("EmpleadoServlet");
+            } else {
+                response.sendRedirect("EmpleadoServlet?accion=registro");
             }
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+        } catch (IOException ex) { System.out.println("Error add: " + ex.toString()); }
     }
 
     private void findById(HttpServletRequest request, HttpServletResponse response) {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-            Empleado obj = daoemp.findById(id);
-            request.setAttribute("empleado", obj);
-
+            request.setAttribute("empleado", daoemp.findById(id));
             cargarCombos(request);
-
             request.getRequestDispatcher("/empleado/actualizarempleado.jsp").forward(request, response);
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+        } catch (Exception ex) { System.out.println("Error findById: " + ex.toString()); }
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) {
@@ -179,17 +155,13 @@ public class EmpleadoServlet extends HttpServlet {
             if (obj != null) {
                 cod = Integer.parseInt(request.getParameter("txtCod"));
                 obj.setCodigo(cod);
-
-                boolean res = daoemp.update(obj);
-                if (res) {
+                if (daoemp.update(obj)) {
                     response.sendRedirect("EmpleadoServlet");
                 } else {
                     response.sendRedirect("EmpleadoServlet?accion=actualiza&id=" + cod);
                 }
             }
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+        } catch (IOException | NumberFormatException ex) { System.out.println("Error update: " + ex.toString()); }
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) {
@@ -197,13 +169,9 @@ public class EmpleadoServlet extends HttpServlet {
             cod = Integer.parseInt(request.getParameter("id"));
             Empleado obj = new Empleado();
             obj.setCodigo(cod);
-            boolean res = daoemp.delete(obj);
-            if (res) {
-                response.sendRedirect("EmpleadoServlet");
-            }
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+            daoemp.delete(obj);
+            response.sendRedirect("EmpleadoServlet");
+        } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void enable(HttpServletRequest request, HttpServletResponse response) {
@@ -213,9 +181,7 @@ public class EmpleadoServlet extends HttpServlet {
             obj.setCodigo(cod);
             daoemp.enable(obj);
             response.sendRedirect("EmpleadoServlet?accion=habilita");
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+        } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void disable(HttpServletRequest request, HttpServletResponse response) {
@@ -225,29 +191,37 @@ public class EmpleadoServlet extends HttpServlet {
             obj.setCodigo(cod);
             daoemp.disable(obj);
             response.sendRedirect("EmpleadoServlet?accion=habilita");
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
+        } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
+    //validarusuario
     private void login(HttpServletRequest request, HttpServletResponse response) {
+        //declaramos una variable para el resultado
         boolean res = false;
         try {
+            //creamos un objeto de Empleado
             Empleado objemp = new Empleado();
+            //capturamos los valores
             usu = request.getParameter("txtUsu");
             cla = request.getParameter("txtCla");
+            //enviamos los valores a la clase
             objemp.setUsuario(usu);
             objemp.setClave(cla);
+            //validamos el usuario
             List<Empleado> empleados = daoemp.login(objemp);
             res = empleados.size() == 1;
+            //evaluamos el resultado de la validacion
             if (res == true) {
+                //creamos una sesion
                 HttpSession sesion = request.getSession();
+                //asignamos los valores a la sesion
                 sesion.setAttribute("empleados", empleados);
+                //redirigimos hacia la pagina que ncesitamos enviar los valores de sesion
                 response.sendRedirect("menuprincipal.jsp");
             } else {
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
-        } catch (Exception ex) {
+        } catch (ServletException | IOException ex) {
             System.out.println(ex.toString());
         }
 
@@ -260,18 +234,6 @@ public class EmpleadoServlet extends HttpServlet {
             obj.setApellidoPaterno(StringManager.convertUTF8(request.getParameter("txtApeP")));
             obj.setApellidoMaterno(StringManager.convertUTF8(request.getParameter("txtApeM")));
             obj.setDocumento(request.getParameter("txtDoc"));
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String fecNac = request.getParameter("txtFecNac");
-            String fecIng = request.getParameter("txtFecIng");
-
-            if (fecNac != null && !fecNac.isEmpty()) {
-                obj.setFechaNacimiento(sdf.parse(fecNac));
-            }
-            if (fecIng != null && !fecIng.isEmpty()) {
-                obj.setFechaIngreso(sdf.parse(fecIng));
-            }
-
             obj.setDireccion(StringManager.convertUTF8(request.getParameter("txtDir")));
             obj.setTelefono(request.getParameter("txtTel"));
             obj.setCelular(request.getParameter("txtCel"));
@@ -283,28 +245,29 @@ public class EmpleadoServlet extends HttpServlet {
             String estStr = request.getParameter("chkEst");
             obj.setEstado(estStr != null && (estStr.equals("true") || estStr.equals("on")));
 
-            Distrito d = new Distrito();
-            d.setCodigo(Integer.parseInt(request.getParameter("cboDistrito")));
-            obj.setDistrito(d);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fNac = request.getParameter("txtFecNac");
+            String fIng = request.getParameter("txtFecIng");
+            if (fNac != null && !fNac.isEmpty()) obj.setFechaNacimiento(sdf.parse(fNac));
+            if (fIng != null && !fIng.isEmpty()) obj.setFechaIngreso(sdf.parse(fIng));
 
-            Rol r = new Rol();
-            r.setCodigo(Integer.parseInt(request.getParameter("cboRol")));
-            obj.setRol(r);
+            obj.setDistrito(new Distrito());
+            obj.getDistrito().setCodigo(Integer.parseInt(request.getParameter("cboDistrito")));
 
-            Sexo s = new Sexo();
-            s.setCodigo(Integer.parseInt(request.getParameter("cboSexo")));
-            obj.setSexo(s);
+            obj.setRol(new Rol());
+            obj.getRol().setCodigo(Integer.parseInt(request.getParameter("cboRol")));
 
-            TipoDocumento td = new TipoDocumento();
-            td.setCodigo(Integer.parseInt(request.getParameter("cboTipoDoc")));
-            obj.setTipoDocumento(td);
+            obj.setSexo(new Sexo());
+            obj.getSexo().setCodigo(Integer.parseInt(request.getParameter("cboSexo")));
+
+            obj.setTipoDocumento(new TipoDocumento());
+            obj.getTipoDocumento().setCodigo(Integer.parseInt(request.getParameter("cboTipoDoc")));
 
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.println("Error al capturar datos: " + ex.toString());
             return null;
         }
         return obj;
     }
-
 }
 

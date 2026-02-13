@@ -6,34 +6,28 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.List;
 import pe.com.todobaratito.dao.*;
 import pe.com.todobaratito.dao.impl.*;
 import pe.com.todobaratito.model.*;
 import pe.com.todobaratito.util.StringManager;
 
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends HttpServlet {
+@WebServlet(name = "ProveedorServlet", urlPatterns = {"/ProveedorServlet"})
+public class ProveedorServlet extends HttpServlet {
 
-    private ProductoDAO daopro;
-    private MarcaDAO daomar;
-    private CategoriaDAO daocat;
     private ProveedorDAO daoprov;
+    private DistritoDAO daodis;
     private int cod = 0;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        daopro = new ProductoDAOImpl();
-        daomar = new MarcaDAOImpl();
-        daocat = new CategoriaDAOImpl();
         daoprov = new ProveedorDAOImpl();
+        daodis = new DistritoDAOImpl();
     }
 
     private void cargarCombos(HttpServletRequest request) {
-        request.setAttribute("listaMarcas", daomar.findAllCustom());
-        request.setAttribute("listaCategorias", daocat.findAllCustom());
-        request.setAttribute("listaProveedores", daoprov.findAllCustom());
+        request.setAttribute("listaDistritos", daodis.findAllCustom());
     }
 
     @Override
@@ -44,7 +38,7 @@ public class ProductoServlet extends HttpServlet {
             switch (accion) {
                 case "registro":
                     cargarCombos(request);
-                    request.getRequestDispatcher("/producto/registrarproducto.jsp").forward(request, response);
+                    request.getRequestDispatcher("/proveedor/registrarproveedor.jsp").forward(request, response);
                     break;
                 case "actualiza":
                     findById(request, response);
@@ -62,6 +56,8 @@ public class ProductoServlet extends HttpServlet {
                     disable(request, response);
                     break;
                 case "regresar":
+                    findAllCustom(request, response);
+                    break;
                 case "menu":
                     request.getRequestDispatcher("menuprincipal.jsp").forward(request, response);
                     break;
@@ -95,98 +91,91 @@ public class ProductoServlet extends HttpServlet {
 
     private void findAllCustom(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.setAttribute("productos", daopro.findAllCustom());
-            request.getRequestDispatcher("/producto/listarproducto.jsp").forward(request, response);
+            request.setAttribute("proveedores", daoprov.findAllCustom());
+            request.getRequestDispatcher("/proveedor/listarproveedor.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void findAll(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.setAttribute("productos", daopro.findAll());
-            request.getRequestDispatcher("/producto/habilitarproducto.jsp").forward(request, response);
+            request.setAttribute("proveedores", daoprov.findAll());
+            request.getRequestDispatcher("/proveedor/habilitarproveedor.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void add(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Producto obj = capturarDatos(request);
-            if (obj != null && daopro.add(obj)) response.sendRedirect("ProductoServlet");
-            else response.sendRedirect("ProductoServlet?accion=registro");
+            Proveedor obj = capturarDatos(request);
+            if (obj != null && daoprov.add(obj)) response.sendRedirect("ProveedorServlet");
+            else response.sendRedirect("ProveedorServlet?accion=registro");
         } catch (IOException ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void findById(HttpServletRequest request, HttpServletResponse response) {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-            request.setAttribute("producto", daopro.findById(id));
+            request.setAttribute("proveedor", daoprov.findById(id));
             cargarCombos(request);
-            request.getRequestDispatcher("/producto/actualizarproducto.jsp").forward(request, response);
+            request.getRequestDispatcher("/proveedor/actualizarproveedor.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Producto obj = capturarDatos(request);
+            Proveedor obj = capturarDatos(request);
             if (obj != null) {
                 cod = Integer.parseInt(request.getParameter("txtCod"));
                 obj.setCodigo(cod);
-                if (daopro.update(obj)) response.sendRedirect("ProductoServlet");
-                else response.sendRedirect("ProductoServlet?accion=actualiza&id=" + cod);
+                if (daoprov.update(obj)) response.sendRedirect("ProveedorServlet");
+                else response.sendRedirect("ProveedorServlet?accion=actualiza&id=" + cod);
             }
-        } catch (IOException | NumberFormatException ex) { System.out.println("Error: " + ex.toString()); }
+        } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Producto obj = new Producto();
+            Proveedor obj = new Proveedor();
             obj.setCodigo(Integer.parseInt(request.getParameter("id")));
-            daopro.delete(obj);
-            response.sendRedirect("ProductoServlet");
+            daoprov.delete(obj);
+            response.sendRedirect("ProveedorServlet");
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void enable(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Producto obj = new Producto();
+            Proveedor obj = new Proveedor();
             obj.setCodigo(Integer.parseInt(request.getParameter("id")));
-            daopro.enable(obj);
-            response.sendRedirect("ProductoServlet?accion=habilita");
+            daoprov.enable(obj);
+            response.sendRedirect("ProveedorServlet?accion=habilita");
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void disable(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Producto obj = new Producto();
+            Proveedor obj = new Proveedor();
             obj.setCodigo(Integer.parseInt(request.getParameter("id")));
-            daopro.disable(obj);
-            response.sendRedirect("ProductoServlet?accion=habilita");
+            daoprov.disable(obj);
+            response.sendRedirect("ProveedorServlet?accion=habilita");
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
-    private Producto capturarDatos(HttpServletRequest request) {
-        Producto obj = new Producto();
+    private Proveedor capturarDatos(HttpServletRequest request) {
+        Proveedor obj = new Proveedor();
         try {
             obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
-            obj.setDescripcion(StringManager.convertUTF8(request.getParameter("txtDes")));
-            obj.setPrecio(Double.parseDouble(request.getParameter("txtPre")));
-            obj.setCantidad(Integer.parseInt(request.getParameter("txtCan")));
-            obj.setStockminimo(Integer.parseInt(request.getParameter("txtSto")));
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String fIng = request.getParameter("txtFecIng");
-            if (fIng != null && !fIng.isEmpty()) obj.setFechaingreso(sdf.parse(fIng));
+            obj.setRepresentante(StringManager.convertUTF8(request.getParameter("txtRep")));
+            obj.setRuc(request.getParameter("txtRuc"));
+            obj.setDireccion(StringManager.convertUTF8(request.getParameter("txtDir")));
+            obj.setTelefono(request.getParameter("txtTel"));
+            obj.setCelular(request.getParameter("txtCel"));
+            obj.setCorreo(request.getParameter("txtCor"));
+            obj.setContacto(StringManager.convertUTF8(request.getParameter("txtCon")));
 
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
 
-            obj.setMarca(new Marca());
-            obj.getMarca().setCodigo(Integer.parseInt(request.getParameter("cboMarca")));
-
-            obj.setCategoria(new Categoria());
-            obj.getCategoria().setCodigo(Integer.parseInt(request.getParameter("cboCategoria")));
-
-            obj.setProveedor(new Proveedor());
-            obj.getProveedor().setCodigo(Integer.parseInt(request.getParameter("cboProveedor")));
+            obj.setDistrito(new Distrito());
+            obj.getDistrito().setCodigo(Integer.parseInt(request.getParameter("cboDistrito")));
         } catch (Exception ex) {
             System.out.println("Error al capturar: " + ex.toString());
             return null;
