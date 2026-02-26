@@ -27,7 +27,7 @@
 <div class="container mt-4">
     <h1>Habilitar / Deshabilitar Distritos</h1>
     <div class="mb-3">
-        <a href="DistritosServlet?accion=regresar" class="btn btn-dark">Regresar</a>
+        <a href="DistritoServlet?accion=regresar" class="btn btn-dark">Regresar</a>
     </div>
 
     <div class="table-responsive">
