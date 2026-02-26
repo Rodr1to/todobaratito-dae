@@ -13,7 +13,7 @@
         response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
     }
-    Distrito distrito = (Distrito) request.getAttribute("distritos");
+    Distrito distrito = (Distrito) request.getAttribute("distrito");
 %>
 <!doctype html>
 <html lang="es">
