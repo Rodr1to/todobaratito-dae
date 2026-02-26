@@ -102,20 +102,22 @@ public class RegistroCompraDAOImpl implements RegistroCompraDAO {
 
     @Override
     public RegistroCompra findById(int id) {
-        RegistroCompra lista = new RegistroCompra();
-        String sql ="{call sp_BuscarRegistroCompra(?)}";
+        RegistroCompra lista= new RegistroCompra();
+        String sql="{call sp_BuscarRegistroCompra(?)}";
         try {
-            xcon = objconexion.obtenerConexion();
-            cst = xcon.prepareCall(sql);
+            xcon=objconexion.obtenerConexion();
+            cst=xcon.prepareCall(sql);
             cst.setInt(1, id);
-            rs = cst.executeQuery();
+            rs=cst.executeQuery();
             while(rs.next()){
-                Empleado obje = new Empleado();
-                Proveedor objpv = new Proveedor();
+                Empleado obje=new Empleado();
+                Proveedor objpv=new Proveedor();
 
                 lista.setNumero(rs.getInt("nrocom"));
                 lista.setFechacompra(rs.getDate("feccom"));
+                lista.setTotal(rs.getDouble("Total"));
                 lista.setEstado(rs.getBoolean("estcom"));
+
                 objpv.setNombre(rs.getString("nomprov"));
                 objpv.setRepresentante(rs.getString("repprov"));
                 lista.setProveedor(objpv);
@@ -125,15 +127,14 @@ public class RegistroCompraDAOImpl implements RegistroCompraDAO {
                 obje.setApellidoMaterno(rs.getString("apememp"));
                 lista.setEmpleado(obje);
             }
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             System.out.println(ex.toString());
-        }
-        finally{
+        } finally {
             objconexion.cerrarConexion(xcon);
         }
         return lista;
     }
+
 
     @Override
     public boolean add(RegistroCompra obj) {

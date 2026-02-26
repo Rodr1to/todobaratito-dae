@@ -73,7 +73,8 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public List<Producto> findAllCustom() {
         List<Producto> lista = new ArrayList<>();
-        String sql = "select p.*, m.nommar, c.nomcat, pv.nomprov " +
+        String sql = "select p.codpro, p.nompro, p.despro, p.prepro, p.canpro, p.stockminimo, p.fecing, p.estpro, " +
+                "m.codmar, m.nommar, c.codcat, c.nomcat, pv.codprov, pv.nomprov, pv.repprov " +
                 "from producto p " +
                 "inner join marca m on p.codmar=m.codmar " +
                 "inner join categoria c on p.codcat=c.codcat " +
@@ -107,6 +108,7 @@ public class ProductoDAOImpl implements ProductoDAO {
                 Proveedor pv = new Proveedor();
                 pv.setCodigo(rs.getInt("codprov"));
                 pv.setNombre(rs.getString("nomprov"));
+                pv.setRepresentante(rs.getString("repprov"));
                 obj.setProveedor(pv);
 
                 lista.add(obj);

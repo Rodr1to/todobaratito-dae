@@ -295,6 +295,8 @@ public class EmpleadoDAOImpl implements EmpleadoDAO{
         try {
             xcon = objconexion.obtenerConexion();
             cst = xcon.prepareCall(sql);
+            cst.setString(1, obj.getUsuario());
+            cst.setString(2, obj.getClave());
             rs = cst.executeQuery();
             while(rs.next()){
                 Empleado obje = new Empleado();
@@ -307,10 +309,10 @@ public class EmpleadoDAOImpl implements EmpleadoDAO{
                 obje.setUsuario(rs.getString("usuemp"));
 
                 objr.setCodigo(rs.getInt("codrol"));
-                objr.setNombre(rs.getString("nomemp"));
+                objr.setNombre(rs.getString("nomrol"));
                 obje.setRol(objr);
 
-                lista.add(obj);
+                lista.add(obje);
             }
         }
         catch (SQLException ex){

@@ -76,6 +76,13 @@ public class EmpleadoServlet extends HttpServlet {
                 case "menu":
                     request.getRequestDispatcher("menuprincipal.jsp").forward(request, response);
                     break;
+                case "cerrarsesion":
+                    HttpSession sesion=request.getSession();
+                    if(sesion!=null){
+                        sesion.invalidate();
+                        response.sendRedirect("index.jsp");
+                    }
+                    break;
                 default:
                     findAllCustom(request, response);
                     break;

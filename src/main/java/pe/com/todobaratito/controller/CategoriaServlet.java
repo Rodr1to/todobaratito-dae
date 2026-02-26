@@ -1,18 +1,17 @@
 package pe.com.todobaratito.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 import pe.com.todobaratito.dao.CategoriaDAO;
 import pe.com.todobaratito.dao.impl.CategoriaDAOImpl;
 import pe.com.todobaratito.model.Categoria;
 import pe.com.todobaratito.util.StringManager;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 
 //name = "CategoriaServlet" -> define el nombre del Servelet
@@ -167,7 +166,7 @@ public class CategoriaServlet extends HttpServlet {
             //enviamos las categorias como variables
             request.setAttribute("categorias", categorias);
             //asignamos el formulario al cual se van a enviar las categorias
-            request.getRequestDispatcher("/categoria/listarcategoria.jsp").forward(request, response);
+            request.getRequestDispatcher("/categoria/habilitarcategoria.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             System.out.println("Error: "+ex.toString());
         }
@@ -279,7 +278,7 @@ public class CategoriaServlet extends HttpServlet {
             boolean res=daocat.enable(obj);
             //evaluamos el registro
             if(res==true){
-                response.sendRedirect("CategoriaServlet");
+                response.sendRedirect("CategoriaServlet?accion=habilita");
             }else{
                 response.sendRedirect("CategoriaServlet?accion=habilita");
             }
@@ -301,7 +300,7 @@ public class CategoriaServlet extends HttpServlet {
             boolean res=daocat.disable(obj);
             //evaluamos el registro
             if(res==true){
-                response.sendRedirect("CategoriaServlet");
+                response.sendRedirect("CategoriaServlet?accion=habilita");
             }else{
                 response.sendRedirect("CategoriaServlet?accion=habilita");
             }
@@ -312,5 +311,6 @@ public class CategoriaServlet extends HttpServlet {
 
 
 }
+
 
 
