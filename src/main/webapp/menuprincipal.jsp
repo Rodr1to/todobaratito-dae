@@ -44,11 +44,11 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="CategoriaServlet">Categoria</a></li>
-                            <li><a class="dropdown-item" href="#">Marca</a></li>
-                            <li><a class="dropdown-item" href="#">Rol</a></li>
-                            <li><a class="dropdown-item" href="#">Sexo</a></li>
-                            <li><a class="dropdown-item" href="#">Distrito</a></li>
-                            <li><a class="dropdown-item" href="#">Tipo de Documento</a></li>
+                            <li><a class="dropdown-item" href="MarcaServlet">Marca</a></li>
+                            <li><a class="dropdown-item" href="RolServlet">Rol</a></li>
+                            <li><a class="dropdown-item" href="SexoServlet">Sexo</a></li>
+                            <li><a class="dropdown-item" href="DistritoServlet">Distrito</a></li>
+                            <li><a class="dropdown-item" href="TipoDocumentoServlet">Tipo de Documento</a></li>
                         </ul>
                     </li>
 
@@ -57,9 +57,9 @@
                             Mantenimiento Cruzado
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Producto</a></li>
-                            <li><a class="dropdown-item" href="#">Proveedor</a></li>
-                            <li><a class="dropdown-item" href="#">Empleado</a></li>
+                            <li><a class="dropdown-item" href="ProductoServlet">Producto</a></li>
+                            <li><a class="dropdown-item" href="ProveedorServlet">Proveedor</a></li>
+                            <li><a class="dropdown-item" href="EmpleadoServlet">Empleado</a></li>
                         </ul>
                     </li>
 
