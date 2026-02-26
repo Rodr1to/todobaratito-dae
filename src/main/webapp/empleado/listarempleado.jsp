@@ -11,6 +11,7 @@
     response.sendRedirect(request.getContextPath() + "/index.jsp");
     return;
   }
+
   List<Empleado> listaEmpleados = (List<Empleado>) request.getAttribute("empleados");
 %>
 <!doctype html>
@@ -46,8 +47,10 @@
       </tr>
       </thead>
       <tbody>
-        <% if(listaEmpleados != null) {
-                for (Empleado obj : listaEmpleados) { %>
+      <%
+        if (listaEmpleados != null && !listaEmpleados.isEmpty()) {
+          for (Empleado obj : listaEmpleados) {
+      %>
       <tr>
         <th scope="row"><%= obj.getCodigo()%></th>
         <td><%= obj.getNombre()%> <%= obj.getApellidoPaterno()%> <%= obj.getApellidoMaterno()%></td>
@@ -57,4 +60,21 @@
         <td><%= obj.getDistrito().getNombre()%></td>
         <td><%= obj.isEstado() ? "Habilitado" : "Deshabilitado"%></td>
         <td><a href="EmpleadoServlet?accion=actualiza&id=<%= obj.getCodigo()%>" class="btn btn-success">Seleccionar</a></td>
-        <td><a href="EmpleadoServlet?accion=eliminar&id=<%= obj.getCodigo()%>" class="
+        <td><a href="EmpleadoServlet?accion=eliminar&id=<%= obj.getCodigo()%>" class="btn btn-danger">Seleccionar</a></td>
+      </tr>
+      <%      }
+      } else {
+      %>
+      <tr>
+        <td colspan="9" class="text-center">No hay empleados registrados</td>
+      </tr>
+      <%
+        }
+      %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

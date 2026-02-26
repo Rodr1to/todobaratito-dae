@@ -98,7 +98,7 @@ public class RolServlet extends HttpServlet {
     private void add(HttpServletRequest request, HttpServletResponse response) {
         try {
             Rol obj = new Rol();
-            obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
+            obj.setNombre(request.getParameter("txtNom"));
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
 
@@ -120,7 +120,7 @@ public class RolServlet extends HttpServlet {
             Rol obj = new Rol();
             cod = Integer.parseInt(request.getParameter("txtCod"));
             obj.setCodigo(cod);
-            obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
+            obj.setNombre(request.getParameter("txtNom"));
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
 

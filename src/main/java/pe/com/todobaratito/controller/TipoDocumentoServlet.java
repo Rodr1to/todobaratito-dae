@@ -30,7 +30,7 @@ public class TipoDocumentoServlet extends HttpServlet {
             if (accion == null) accion = "listar";
             switch (accion) {
                 case "registro":
-                    request.getRequestDispatcher("/tipodocumento/registrartipodocumento.jsp").forward(request, response);
+                    request.getRequestDispatcher("/tipodocumento/registrartipodoc.jsp").forward(request, response);
                     break;
                 case "actualiza":
                     findById(request, response);
@@ -84,21 +84,21 @@ public class TipoDocumentoServlet extends HttpServlet {
     private void findAllCustom(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("tipodocumentos", dao.findAllCustom());
-            request.getRequestDispatcher("/tipodocumento/listartipodocumento.jsp").forward(request, response);
+            request.getRequestDispatcher("/tipodocumento/listartipodoc.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void findAll(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("tipodocumentos", dao.findAll());
-            request.getRequestDispatcher("/tipodocumento/habilitartipodocumento.jsp").forward(request, response);
+            request.getRequestDispatcher("/tipodocumento/habilitartipodoc.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void add(HttpServletRequest request, HttpServletResponse response) {
         try {
             TipoDocumento obj = new TipoDocumento();
-            obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
+            obj.setNombre(request.getParameter("txtNom"));
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
 
@@ -111,7 +111,7 @@ public class TipoDocumentoServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             request.setAttribute("tipodocumento", dao.findById(id));
-            request.getRequestDispatcher("/tipodocumento/actualizartipodocumento.jsp").forward(request, response);
+            request.getRequestDispatcher("/tipodocumento/actualizartipodoc.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
@@ -120,7 +120,7 @@ public class TipoDocumentoServlet extends HttpServlet {
             TipoDocumento obj = new TipoDocumento();
             cod = Integer.parseInt(request.getParameter("txtCod"));
             obj.setCodigo(cod);
-            obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
+            obj.setNombre(request.getParameter("txtNom"));
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
 

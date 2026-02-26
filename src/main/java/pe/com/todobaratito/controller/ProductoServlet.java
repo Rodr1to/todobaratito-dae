@@ -62,6 +62,8 @@ public class ProductoServlet extends HttpServlet {
                     disable(request, response);
                     break;
                 case "regresar":
+                    findAllCustom(request, response);
+                    break;
                 case "menu":
                     request.getRequestDispatcher("menuprincipal.jsp").forward(request, response);
                     break;

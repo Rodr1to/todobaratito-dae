@@ -84,7 +84,7 @@ public class MarcaServlet extends HttpServlet {
     private void findAllCustom(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("marcas", dao.findAllCustom());
-            request.getRequestDispatcher("/marca/listardistrito.jsp").forward(request, response);
+            request.getRequestDispatcher("/marca/listarmarca.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 

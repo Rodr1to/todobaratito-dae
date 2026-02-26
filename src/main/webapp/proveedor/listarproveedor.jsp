@@ -27,8 +27,8 @@
     <tr>
       <td><%= p.getRuc()%></td><td><%= p.getNombre()%></td><td><%= p.getRepresentante()%></td>
       <td><%= p.getDistrito().getNombre()%></td><td><%= p.getCelular()%></td>
-      <td><a href="ProveedorServlet?accion=actualiza&id=<%= p.getCodigo()%>" class="btn btn-success">Selec</a></td>
-      <td><a href="ProveedorServlet?accion=eliminar&id=<%= p.getCodigo()%>" class="btn btn-danger">Selec</a></td>
+      <td><a href="ProveedorServlet?accion=actualiza&id=<%= p.getCodigo()%>" class="btn btn-success">Seleccionar</a></td>
+      <td><a href="ProveedorServlet?accion=eliminar&id=<%= p.getCodigo()%>" class="btn btn-danger">Seleccionar</a></td>
     </tr>
     <% } } %>
     </tbody>

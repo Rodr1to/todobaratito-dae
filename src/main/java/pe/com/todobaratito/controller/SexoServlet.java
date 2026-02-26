@@ -98,7 +98,7 @@ public class SexoServlet extends HttpServlet {
     private void add(HttpServletRequest request, HttpServletResponse response) {
         try {
             Sexo obj = new Sexo();
-            obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
+            obj.setNombre(request.getParameter("txtNom"));
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
 
@@ -120,7 +120,7 @@ public class SexoServlet extends HttpServlet {
             Sexo obj = new Sexo();
             cod = Integer.parseInt(request.getParameter("txtCod"));
             obj.setCodigo(cod);
-            obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
+            obj.setNombre(request.getParameter("txtNom"));
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
 
