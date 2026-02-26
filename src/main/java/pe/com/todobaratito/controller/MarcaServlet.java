@@ -30,7 +30,7 @@ public class MarcaServlet extends HttpServlet {
             if (accion == null) accion = "listar";
             switch (accion) {
                 case "registro":
-                    request.getRequestDispatcher("/marca/registrarmarca.jsp").forward(request, response);
+                    request.getRequestDispatcher("/marca/registrardistrito.jsp").forward(request, response);
                     break;
                 case "actualiza":
                     findById(request, response);
@@ -84,14 +84,14 @@ public class MarcaServlet extends HttpServlet {
     private void findAllCustom(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("marcas", dao.findAllCustom());
-            request.getRequestDispatcher("/marca/listarmarca.jsp").forward(request, response);
+            request.getRequestDispatcher("/marca/listardistrito.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
     private void findAll(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("marcas", dao.findAll());
-            request.getRequestDispatcher("/marca/habilitarmarca.jsp").forward(request, response);
+            request.getRequestDispatcher("/marca/habilitardistrito.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
@@ -111,7 +111,7 @@ public class MarcaServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             request.setAttribute("marca", dao.findById(id));
-            request.getRequestDispatcher("/marca/actualizarmarca.jsp").forward(request, response);
+            request.getRequestDispatcher("/marca/actualizardistrito.jsp").forward(request, response);
         } catch (Exception ex) { System.out.println("Error: " + ex.toString()); }
     }
 
