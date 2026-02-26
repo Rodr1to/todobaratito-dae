@@ -12,6 +12,12 @@
     List<Marca> marcas = (List<Marca>) request.getAttribute("listaMarcas");
     List<Categoria> categorias = (List<Categoria>) request.getAttribute("listaCategorias");
     List<Proveedor> proveedores = (List<Proveedor>) request.getAttribute("listaProveedores");
+
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+    String fechaFormateada = "";
+    if (producto.getFechaingreso() != null) {
+        fechaFormateada = sdf.format(producto.getFechaingreso());
+    }
 %>
 <!doctype html>
 <html lang="es">
@@ -53,6 +59,10 @@
                         <label class="form-label">Stock Mínimo:</label>
                         <input type="number" class="form-control" name="txtSto" value="<%= producto.getStockminimo() %>" required>
                     </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Fecha de Ingreso:</label>
+                    <input type="date" class="form-control" name="txtFecIng" value="<%= fechaFormateada %>" required>
                 </div>
                 <hr>
                 <div class="row">

@@ -19,9 +19,9 @@
     <tbody>
     <% if(proveedores != null) { for (Proveedor p : proveedores) { %>
     <tr>
-      <td><%= p.getRuc()%></td><td><%= p.getNombre()%></td><td><%= p.isEstado() ? "Hab" : "Des" %></td>
-      <td><a href="ProveedorServlet?accion=habilitar&id=<%= p.getCodigo()%>" class="btn btn-warning">Selec</a></td>
-      <td><a href="ProveedorServlet?accion=deshabilitar&id=<%= p.getCodigo()%>" class="btn btn-danger">Selec</a></td>
+      <td><%= p.getRuc()%></td><td><%= p.getNombre()%></td><td><%= p.isEstado() ? "Habilitado" : "Deshabilitado" %></td>
+      <td><a href="ProveedorServlet?accion=habilitar&id=<%= p.getCodigo()%>" class="btn btn-warning">Seleccionar</a></td>
+      <td><a href="ProveedorServlet?accion=deshabilitar&id=<%= p.getCodigo()%>" class="btn btn-danger">Seleccionar</a></td>
     </tr>
     <% } } %>
     </tbody>

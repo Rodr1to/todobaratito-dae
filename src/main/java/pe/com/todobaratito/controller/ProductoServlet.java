@@ -168,15 +168,19 @@ public class ProductoServlet extends HttpServlet {
     private Producto capturarDatos(HttpServletRequest request) {
         Producto obj = new Producto();
         try {
-            obj.setNombre(StringManager.convertUTF8(request.getParameter("txtNom")));
-            obj.setDescripcion(StringManager.convertUTF8(request.getParameter("txtDes")));
+            obj.setNombre(request.getParameter("txtNom"));
+            obj.setDescripcion(request.getParameter("txtDes"));
             obj.setPrecio(Double.parseDouble(request.getParameter("txtPre")));
             obj.setCantidad(Integer.parseInt(request.getParameter("txtCan")));
             obj.setStockminimo(Integer.parseInt(request.getParameter("txtSto")));
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String fIng = request.getParameter("txtFecIng");
-            if (fIng != null && !fIng.isEmpty()) obj.setFechaingreso(sdf.parse(fIng));
+            if (fIng != null && !fIng.trim().isEmpty()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                obj.setFechaingreso(sdf.parse(fIng));
+            } else {
+                obj.setFechaingreso(null);
+            }
 
             String est = request.getParameter("chkEst");
             obj.setEstado(est != null && (est.equals("true") || est.equals("on")));
@@ -190,7 +194,7 @@ public class ProductoServlet extends HttpServlet {
             obj.setProveedor(new Proveedor());
             obj.getProveedor().setCodigo(Integer.parseInt(request.getParameter("cboProveedor")));
         } catch (Exception ex) {
-            System.out.println("Error al capturar: " + ex.toString());
+            System.out.println("Error al capturar en Producto: " + ex.toString());
             return null;
         }
         return obj;
